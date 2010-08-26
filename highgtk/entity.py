@@ -80,16 +80,17 @@ class Inquiry (Entity):
     - title: string
     - ok_text: string or gtk stock item
     - ok_method: method of parent of self to be called in case of success (defaults to inquiry_okay)
+    signature: f (self, inquiry, result_dict)
     - cancel_method: method of parent of self to be called in case of failure (no function called, if
     attribute is not pressent)
-
-    All callback functions must have the following signature:
-    def f (self, inquiry)
+    signature: f (self, inquiry)
 
     """
 
-    def __init__ (self):
+    def __init__ (self, data):
+        "data: a list of data entries"
         Entity.__init__ (self)
+        self.data = data
         self.presentation = highgtk.present.current.get()
 
     def show (self):
