@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import highgtk.entity
+import highgtk.app.staged
 
 if __name__=="__main__":
-    app = highgtk.entity.Application ("Test")
+    app = highgtk.app.staged.Application ("Test")
     app.run()
