@@ -1,0 +1,6 @@
+
+high-pygtk
+
+
+high-pygtk is an experiment in GUI design. The basic idea is to develop GUIs at a higher
+abstraction level, i.e. don't design windows, menus, toolbars and such, but user-interactions.
