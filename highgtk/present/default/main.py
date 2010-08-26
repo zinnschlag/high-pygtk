@@ -3,6 +3,7 @@
 import gtk
 
 import highgtk.entity
+import highgtk.present.default.inquiry
 
 class Presentation:
 
@@ -15,3 +16,11 @@ class Presentation:
         message.show()
         message.run()
         gtk.main_quit()
+
+    def add_inquiry (self, inquiry):
+        """Add presentation to inquiry."""
+        highgtk.present.default.inquiry.add (inquiry)
+
+    def remove_inquiry (self, inquiry):
+        """Remove presentation from inquiry."""
+        highgtk.present.default.inquiry.remove (inquiry)

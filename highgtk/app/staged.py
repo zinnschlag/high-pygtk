@@ -17,16 +17,17 @@ class Stage (highgtk.entity.Entity):
     """A stage within a stages application."""
 
     def __init__ (self, application, name):
+        highgtk.entity.Entity.__init__ (self)
         self.application = application
         self.name = name
 
     def _run (self):
         self.application.add (self)
-        self.run (self)
+        self.run()
 
     def _stop (self):
-        self._stop()
-        self.application.remove (self)
+        self.stop()
+        self.application.remove (self, keep_children = True)
 
     def run (self):
         """Start stage (making it the current stage)."""
@@ -65,14 +66,14 @@ class Application (highgtk.entity.Application):
         if self.stage<0 or self.stage>=len (self.stages):
             gtk.main_quit()
         else:
-            self.stages[self.stage].run()
+            self.stages[self.stage]._run()
 
     def enter_stage (self, stage_name):
         """Enter a specific stage."""
         stage = get_stage (stage_name)
         self._exit_current()
         self.stage = self.stages (stage)
-        self.stages[self.stage].run()
+        self.stages[self.stage]._run()
 
     def get_stage (self, stage_name):
         """Get stage by name."""
@@ -83,7 +84,7 @@ class Application (highgtk.entity.Application):
 
     def _exit_current (self):
         if self.stage>=0 and self.stage < len (self.stages):
-            self.stages[self.stage].stop()
+            self.stages[self.stage]._stop()
 
     def _start (self):
         """Start the first stage."""

@@ -16,6 +16,7 @@ class Entity:
         assert entity.parent is None
         entity.parent = self
         self.children.append (entity)
+        self._show()
 
     def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
@@ -28,9 +29,24 @@ class Entity:
             self.parent.children.remove (self)
         self.parent = None
 
+    def _show (self):
+        self.show()
+        for c in self.children:
+            c._show()
+
+    def _hide (self):
+        self.hide()
+        for c in self.children:
+            c._hide()
+
+    def show (self):
+        """Show entity to user."""
+        pass
+
     def hide (self):
         """Hide entity from user."""
         pass
+
 
 class Application (Entity):
     """Entity that represents the whole application.
@@ -55,6 +71,35 @@ class Application (Entity):
     def terminate (self, error):
         """Terminate application with an error message."""
         self.presentation.terminate (self, error)
+
+
+class Inquiry (Entity):
+    """Inquiry: Applications requesting input from user.
+
+    Optional attributes:
+    - title: string
+    - ok_text: string or gtk stock item
+    - ok_method: method of parent of self to be called in case of success (defaults to inquiry_okay)
+    - cancel_method: method of parent of self to be called in case of failure (no function called, if
+    attribute is not pressent)
+
+    All callback functions must have the following signature:
+    def f (self, inquiry)
+
+    """
+
+    def __init__ (self):
+        Entity.__init__ (self)
+        self.presentation = highgtk.present.current.get()
+
+    def show (self):
+        """Show entity to user."""
+        self.presentation.add_inquiry (self)
+
+    def hide (self):
+        """Hide entity from user."""
+        self.presentation.remove_inquiry (self)
+
 
 def get_root (entity):
     """Return the root for the given entity."""
