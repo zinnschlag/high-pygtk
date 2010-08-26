@@ -13,11 +13,20 @@ import gtk
 
 import highgtk.entity
 
-class Stage:
+class Stage (highgtk.entity.Entity):
     """A stage within a stages application."""
 
-    def __init__ (self, name):
+    def __init__ (self, application, name):
+        self.application = application
         self.name = name
+
+    def _run (self):
+        self.application.add (self)
+        self.run (self)
+
+    def _stop (self):
+        self._stop()
+        self.application.remove (self)
 
     def run (self):
         """Start stage (making it the current stage)."""

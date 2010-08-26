@@ -17,14 +17,20 @@ class Entity:
         entity.parent = self
         self.children.append (entity)
 
-    def remove (self, remove_parent = True):
+    def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
+        if not keep_children:
+            for c in self.children:
+                c.remove (False, keep_children)
+            self.children = []
+        self.hide()
         if self.parent and remove_parent:
             self.parent.children.remove (self)
         self.parent = None
-        for c in self.children:
-            c.remove (False)
-        self.children = []
+
+    def hide (self):
+        """Hide entity from user."""
+        pass
 
 class Application (Entity):
     """Entity that represents the whole application.
