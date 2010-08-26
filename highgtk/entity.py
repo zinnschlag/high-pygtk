@@ -2,6 +2,8 @@
 
 import gtk
 
+import highgtk.present.current
+
 class Entity:
     """This is the entity base class."""
 
@@ -38,15 +40,20 @@ class Application (Entity):
         """
         Entity.__init__ (self)
         self.name = name
+        self.presentation = highgtk.present.current.get()
 
     def run (self):
         """Run main loop (blocks until application is qutting)."""
         gtk.main()
+
+    def terminate (self, error):
+        """Terminate application with an error message."""
+        self.presentation.terminate (self, error)
 
 def get_root (entity):
     """Return the root for the given entity."""
     assert entity is not None
     while entity.parent is not None:
         entity = entity.parent
-    assert instanceof (entity, Application)
+    assert isinstance (entity, Application)
     return entity
