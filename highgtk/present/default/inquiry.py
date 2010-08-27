@@ -41,9 +41,13 @@ def cancel (inquiry):
 
 def okay (inquiry):
     method_name = getattr (inquiry, "ok_method", "inquiry_okay")
-    method = getattr (inquiry.parent, method_name)
-    method (inquiry, inquiry.present_layout.get_data())
-    inquiry.parent.remove (inquiry)
+    error = inquiry.present_layout.get_error()
+    if error is not None:
+        print error # TODO report error properly
+    else:
+        method = getattr (inquiry.parent, method_name)
+        method (inquiry, inquiry.present_layout.get_data())
+        inquiry.parent.remove (inquiry)
 
 def response (widget, response_id, inquiry):
     if response_id==gtk.RESPONSE_OK:

@@ -3,14 +3,16 @@
 import highgtk.app.staged
 import highgtk.entity
 import highgtk.data
+import highgtk.constraint
 
 class TestStage (highgtk.app.staged.Stage):
 
     def __init__ (self, app):
         highgtk.app.staged.Stage.__init__ (self, app, "Stage 1")
         data = (
-            highgtk.data.Text ("id1", "Some text"),
-            highgtk.data.Text ("id2", "Some other text"))
+            ( highgtk.data.Text ("id1", "Some text"), [ highgtk.constraint.Min (3) ] ),
+            ( highgtk.data.Text ("id2", "Some other text"), None )
+            )
         self.inquiry = highgtk.entity.Inquiry (data)
         self.inquiry.title = "Some Input, please!"
         self.inquiry.ok_method = "_quit_ok"
