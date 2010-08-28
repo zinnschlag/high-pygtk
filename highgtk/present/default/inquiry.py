@@ -43,7 +43,8 @@ def okay (inquiry):
     method_name = getattr (inquiry, "ok_method", "inquiry_okay")
     error = inquiry.present_layout.get_error()
     if error is not None:
-        print error # TODO report error properly
+        inquiry.error_report.primary = error
+        inquiry.add (inquiry.error_report)
     else:
         method = getattr (inquiry.parent, method_name)
         method (inquiry, inquiry.present_layout.get_data())

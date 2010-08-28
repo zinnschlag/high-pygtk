@@ -13,18 +13,19 @@ class Entity:
 
     def add (self, entity):
         """Make entity a child of self."""
-        assert entity.parent is None
+        if entity.parent is not None:
+            entity.remove (keep_children=True)
         entity.parent = self
         self.children.append (entity)
         self._show()
 
     def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
+        self._hide()
         if not keep_children:
             for c in self.children:
                 c.remove (False, keep_children)
             self.children = []
-        self.hide()
         if self.parent and remove_parent:
             self.parent.children.remove (self)
         self.parent = None
@@ -73,6 +74,31 @@ class Application (Entity):
         self.presentation.terminate (self, error)
 
 
+class Report (Entity):
+    """Report: Application is passing out information to the user.
+    """
+
+    def __init__ (self, type_, primary = None, secondary = None):
+        """
+        type: info, warning, error
+        primary: Primary message
+        secondary: Secondary message
+        """
+        Entity.__init__ (self)
+        self.type = type_
+        self.primary = primary
+        self.secondary = secondary
+        self.presentation = highgtk.present.current.get()
+
+    def show (self):
+        """Show entity to user."""
+        self.presentation.add_report (self)
+
+    def hide (self):
+        """Hide entity from user."""
+        self.presentation.remove_inquiry (self)
+
+
 class Inquiry (Entity):
     """Inquiry: Applications requesting input from user.
 
@@ -92,6 +118,7 @@ class Inquiry (Entity):
         Entity.__init__ (self)
         self.data = data
         self.presentation = highgtk.present.current.get()
+        self.error_report = Report ("error")
 
     def show (self):
         """Show entity to user."""
