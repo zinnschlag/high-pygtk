@@ -15,7 +15,10 @@ class PlainLayout:
         """Insert layout into widget."""
         vbox = gtk.VBox()
         vbox.set_border_width (4)
-        widget.add (vbox)
+        if isinstance (widget, gtk.Box):
+            widget.pack_start (vbox, expand=False, fill=False)
+        else:
+            widget.add (vbox)
         self.widgets = {}
         for e, c in self.data:
             inner = gtk.VBox()

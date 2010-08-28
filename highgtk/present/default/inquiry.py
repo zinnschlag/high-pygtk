@@ -22,6 +22,10 @@ def add (inquiry):
         inquiry.present_window.set_position (gtk.WIN_POS_CENTER)
         inquiry.present_layout = highgtk.present.default.layout.get_layout (inquiry.data)
         inquiry.present_layout.build (inquiry.present_window.get_content_area())
+        inquiry.present_report = gtk.Label()
+        inquiry.present_report.set_line_wrap (True)
+        inquiry.present_report.set_alignment (0.0, 0.5)
+        inquiry.present_window.get_content_area().pack_end (inquiry.present_report)
         inquiry.present_window.show_all()
     else:
         window.present()
