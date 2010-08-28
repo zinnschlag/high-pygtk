@@ -8,3 +8,12 @@ class Text:
         self.label = label
         self.default_value = default_value
         self.hint = hint
+
+class HiddenText:
+    """Text entry, that must not be shown on the screen."""
+
+    def __init__ (self, id_, label, default_value = "", hint = ""):
+        self.id_ = id_
+        self.label = label
+        self.default_value = default_value
+        self.hint = hint

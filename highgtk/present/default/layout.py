@@ -30,15 +30,26 @@ class PlainLayout:
                     entry.set_tooltip (e.hint)
                 inner.pack_start (entry, expand=False, fill=False)
                 self.widgets[e.id_] = entry
-                if c is not None:
-                    for i in c:
-                        i.configure (self.data, entry, e)
+            elif isinstance (e, highgtk.data.HiddenText):
+                entry = gtk.Entry()
+                entry.set_visibility (False)
+                if e.hint!="":
+                    entry.set_tooltip (e.hint)
+                inner.pack_start (entry, expand=False, fill=False)
+                self.widgets[e.id_] = entry
+            else:
+                raise Exception ("unsupported data type")
+            if c is not None:
+                for i in c:
+                    i.configure (self.data, entry, e)
 
     def get_data (self):
         """Return dictionary with the data entered into the layout."""
         result = {}
         for e, k in self.data:
             if isinstance (e, highgtk.data.Text):
+                result[e.id_] = self.widgets[e.id_].get_text()
+            elif isinstance (e, highgtk.data.HiddenText):
                 result[e.id_] = self.widgets[e.id_].get_text()
         return result
 
