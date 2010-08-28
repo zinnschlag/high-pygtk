@@ -26,7 +26,6 @@ class PlainLayout:
                 inner.pack_start (label, expand=False, fill=False)
             if isinstance (e, highgtk.data.Text):
                 entry = gtk.Entry()
-                entry.set_max_length (e.max_len)
                 if e.hint!="":
                     entry.set_tooltip (e.hint)
                 inner.pack_start (entry, expand=False, fill=False)
