@@ -49,3 +49,26 @@ class Min (Constraint):
                 else:
                     return self.message
         return None
+
+class Equal (Constraint):
+    """Equal constraint: This data entry must have the same value as another data entry."""
+
+    def __init__ (self, other_id, message = None):
+        self.other_id = other_id
+        self.message = message
+
+    def get_error (self, data, result, entry):
+        """Return error string or None.
+
+        data: list of entry/constraints-list pairs
+        result: dictionary of result values indexed by ID.
+        entry: ID of data entry to be bound by constraint
+
+        """
+        if result[self.other_id]==result[entry.id_]:
+            return None
+        if self.message is not None:
+            return self.message
+        other = filter (lambda x: x[0].id_==self.other_id, data)
+        assert len (other)>=1
+        return "%s must match %s" % (entry.label, other[0][0].label)
