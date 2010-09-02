@@ -18,6 +18,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.inquiry.title = "Some Input, please!"
         self.inquiry.ok_method = "_quit_ok"
         self.inquiry.cancel_method = "_quit_cancel"
+        self.view = highgtk.entity.View()
 
     def _quit_ok (self, inquiry, results):
         print results
@@ -28,6 +29,7 @@ class TestStage (highgtk.app.staged.Stage):
 
     def run (self):
         self.add (self.inquiry)
+        self.add (self.view)
 
 if __name__=="__main__":
     app = highgtk.app.staged.Application ("Test")

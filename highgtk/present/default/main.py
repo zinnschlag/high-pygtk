@@ -5,6 +5,7 @@ import gtk
 import highgtk.entity
 import highgtk.present.default.inquiry
 import highgtk.present.default.report
+import highgtk.present.default.view
 
 class Presentation:
 
@@ -33,3 +34,11 @@ class Presentation:
     def remove_report (self, report):
         """Remove presentation from report."""
         highgtk.present.default.report.remove (report)
+
+    def add_view (self, view):
+        """Add presentation to view."""
+        highgtk.present.default.view.add (view)
+
+    def remove_view (self, view):
+        """Remove presentation from view."""
+        highgtk.present.default.view.remove (view)

@@ -11,13 +11,23 @@ class Entity:
         self.children = []
         self.parent = None
 
+    def is_linked (self):
+        """Is entity linked to an application root?"""
+        parent = self
+        while parent.parent is not None:
+            parent = parent.parent
+            if isinstance (parent, Application):
+                return True
+        return False
+
     def add (self, entity):
         """Make entity a child of self."""
         if entity.parent is not None:
             entity.remove (keep_children=True)
         entity.parent = self
         self.children.append (entity)
-        self._show()
+        if self.is_linked():
+            self._show()
 
     def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
@@ -127,6 +137,25 @@ class Inquiry (Entity):
     def hide (self):
         """Hide entity from user."""
         self.presentation.remove_inquiry (self)
+
+
+class View (Entity):
+
+    def __init__ (self):
+        "data: a list of data entries"
+        Entity.__init__ (self)
+        self.presentation = highgtk.present.current.get()
+
+    def show (self):
+        """Show entity to user."""
+        self.presentation.add_view (self)
+
+    def hide (self):
+        """Hide entity from user."""
+        self.presentation.remove_view (self)
+
+    def close_request (self):
+        self.remove()
 
 
 def get_root (entity):
