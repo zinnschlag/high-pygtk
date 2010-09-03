@@ -140,6 +140,9 @@ class Inquiry (Entity):
 
 
 class View (Entity):
+    """View: Entity that allows the user to view and interact with a document.
+
+    """
 
     def __init__ (self):
         "data: a list of data entries"
@@ -155,7 +158,16 @@ class View (Entity):
         self.presentation.remove_view (self)
 
     def close_request (self):
+        """User requested to close this view."""
         self.remove()
+
+    def get_title (self, child = None):
+        """Return title for this view."""
+        if self.parent is not None:
+            parent = getattr (self.parent, "get_title", None)
+            if parent is not None:
+                return parent.get_title (self)
+        return "view"
 
 
 def get_root (entity):
