@@ -37,6 +37,9 @@ class Stage (highgtk.entity.Entity):
         """Notify stage, that it is no longer the current stage."""
         pass
 
+    def done (self):
+        self.application.advance()
+
 class Application (highgtk.entity.Application):
     """Stages application.
 

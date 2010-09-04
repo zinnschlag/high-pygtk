@@ -37,8 +37,15 @@ class Entity:
                 c.remove (False, keep_children)
             self.children = []
         if self.parent and remove_parent:
-            self.parent.children.remove (self)
+            self.parent._remove_child (self)
         self.parent = None
+
+    def _remove_child (self, child):
+        """Remove child.
+
+        Important: The entity can't refuse to remove the child at this point.
+        """
+        self.children.remove (child)
 
     def _show (self):
         self.show()
@@ -99,6 +106,9 @@ class Application (Entity):
         """Return title for child or application title if child is None."""
         return self.name
 
+    def done (self):
+        gtk.main_quit()
+
 
 class Report (Entity):
     """Report: Application is passing out information to the user.
@@ -155,18 +165,41 @@ class Inquiry (Entity):
         self.presentation.remove_inquiry (self)
 
 
+class DocumentGroup (Entity):
+    """Collection of documents of the same type.
+
+    primary: if True, DocumentGroup will call done function of parent (if available) when
+    the last document is removed from the group.
+
+    """
+
+    def __init__ (self, primary):
+        Entity.__init__ (self)
+        self.primary = primary
+
+    def _remove_child (self, child):
+        Entity._remove_child (self, child)
+        if not [d for x in self.children if isinstance (x, Document)]:
+            if self.parent is not None:
+                done = getattr (self.parent, "done", None)
+                if done is not None:
+                    done()
+
 class Document (Entity):
     """Document: Collection of data.
 
     """
 
-    def __init__ (self):
+    def __init__ (self, persistent = False):
+        """persistent: keep document after the last view is closed."""
         Entity.__init__ (self)
-        self.presentation = highgtk.present.current.get()
+        self.persistent = persistent
 
     def close_child_request (self, child):
         """User requested to close a child of this document."""
         child.remove()
+        if not [d for x in self.children if isinstance (x, View)]:
+            self.remove()
 
     def get_title (self, child = None):
         """Return title for child or for this document if child is None.

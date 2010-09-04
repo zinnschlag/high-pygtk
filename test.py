@@ -18,19 +18,20 @@ class TestStage (highgtk.app.staged.Stage):
         self.inquiry.title = "Some Input, please!"
         self.inquiry.ok_method = "_quit_ok"
         self.inquiry.cancel_method = "_quit_cancel"
+        self.group = highgtk.entity.DocumentGroup (primary=True)
         self.document = highgtk.entity.Document()
         self.view = highgtk.entity.View()
 
     def _quit_ok (self, inquiry, results):
         print results
-        self.application.advance()
 
     def _quit_cancel (self, inquiry):
         self.application.advance()
 
     def run (self):
         self.add (self.inquiry)
-        self.add (self.document)
+        self.add (self.group)
+        self.group.add (self.document)
         self.document.add (self.view)
 
 if __name__=="__main__":
