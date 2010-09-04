@@ -58,6 +58,18 @@ class Entity:
         """Hide entity from user."""
         pass
 
+    def get_title (self, child = None):
+        """Return title for child or for self if child is None.
+
+        Calls get_title function of parent instead, if available.
+
+        """
+        if self.parent is not None:
+            parent = getattr (self.parent, "get_title", None)
+            if parent is not None:
+                return parent (self)
+        return "Unnamed"
+
 
 class Application (Entity):
     """Entity that represents the whole application.
@@ -82,6 +94,10 @@ class Application (Entity):
     def terminate (self, error):
         """Terminate application with an error message."""
         self.presentation.terminate (self, error)
+
+    def get_title (self, child = None):
+        """Return title for child or application title if child is None."""
+        return self.name
 
 
 class Report (Entity):
@@ -139,13 +155,38 @@ class Inquiry (Entity):
         self.presentation.remove_inquiry (self)
 
 
+class Document (Entity):
+    """Document: Collection of data.
+
+    """
+
+    def __init__ (self):
+        Entity.__init__ (self)
+        self.presentation = highgtk.present.current.get()
+
+    def close_child_request (self, child):
+        """User requested to close a child of this document."""
+        child.remove()
+
+    def get_title (self, child = None):
+        """Return title for child or for this document if child is None.
+
+        Calls get_title function of parent instead, if available.
+
+        """
+        if self.parent is not None:
+            parent = getattr (self.parent, "get_title", None)
+            if parent is not None:
+                return parent (self)
+        return "Document"
+
+
 class View (Entity):
     """View: Entity that allows the user to view and interact with a document.
 
     """
 
     def __init__ (self):
-        "data: a list of data entries"
         Entity.__init__ (self)
         self.presentation = highgtk.present.current.get()
 
@@ -158,16 +199,29 @@ class View (Entity):
         self.presentation.remove_view (self)
 
     def close_request (self):
-        """User requested to close this view."""
+        """User requested to close this view.
+
+        Calls close_child_request function of parent instead, if available.
+
+        """
+        if self.parent is not None:
+            parent = getattr (self.parent, "close_child_request", None)
+            if parent is not None:
+                parent (self)
+                return
         self.remove()
 
     def get_title (self, child = None):
-        """Return title for this view."""
+        """Return title for this view.
+
+        Calls get_title function of parent instead, if available.
+
+        """
         if self.parent is not None:
             parent = getattr (self.parent, "get_title", None)
             if parent is not None:
-                return parent.get_title (self)
-        return "view"
+                return parent (self)
+        return "View"
 
 
 def get_root (entity):
