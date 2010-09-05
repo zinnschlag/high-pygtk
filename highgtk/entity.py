@@ -48,14 +48,31 @@ class Entity:
         self.children.remove (child)
 
     def _show (self):
-        self.show()
+        self._show_prepare()
+        self._show_final()
+
+    def _show_prepare (self):
+        self.show_prepare()
+        for c in self.children:
+            c._show_prepare()
+
+    def _show_final (self):
         for c in self.children:
             c._show()
+        self.show()
 
     def _hide (self):
         self.hide()
         for c in self.children:
             c._hide()
+
+    def show_prepare (self):
+        """Prepare showing this entity to the user.
+
+        This function must create all required attributes, but must not actually present
+        anything to the user.
+        """
+        pass
 
     def show (self):
         """Show entity to user."""
