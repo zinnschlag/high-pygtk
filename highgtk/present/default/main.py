@@ -6,6 +6,7 @@ import highgtk.entity
 import highgtk.present.default.inquiry
 import highgtk.present.default.report
 import highgtk.present.default.view
+import highgtk.present.default.element
 
 class Presentation:
 
@@ -39,6 +40,44 @@ class Presentation:
         """Add presentation to view."""
         highgtk.present.default.view.add (view)
 
+    def show_view (self, view):
+        """Present view to user"""
+        highgtk.present.default.view.show (view)
+
     def remove_view (self, view):
         """Remove presentation from view."""
         highgtk.present.default.view.remove (view)
+
+    def add_element_text (self, view_element):
+        """Add presentation for text element to view_element."""
+        highgtk.present.default.element.add_text (view_element)
+
+    def show_element (self, view_element):
+        """Present element to user."""
+        view_element.present_widget.show()
+
+    def remove_element_text (self, view_element):
+        """Remove presentation from view_element."""
+        highgtk.present.default.element.remove_text (view_element)
+
+    def add_element_to_view (self, view, view_element):
+        """Add view element to view.
+
+        Adding an element that has already been added is a no-op.
+
+        """
+        child = view_element.present_widget
+        children = view.present_window.get_children()
+        if not children or children[0]!=child:
+            view.present_window.add (child)
+
+    def remove_element_from_view (self, view, view_element):
+        """Remove view element from view.
+
+        Removing an element that does not belong to view is a no-op.
+
+        """
+        child = view_element.present_widget
+        children = view.present_window.get_children()
+        if child in children:
+            view.present_window.remove (child)

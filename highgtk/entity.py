@@ -27,7 +27,7 @@ class Entity:
         entity.parent = self
         self.children.append (entity)
         if self.is_linked():
-            self._show()
+            entity._show()
 
     def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
@@ -240,9 +240,23 @@ class View (Entity):
         Entity.__init__ (self)
         self.presentation = highgtk.present.current.get()
 
+    def _remove_child (self, child):
+        """Remove child."""
+        if isinstance (child, ViewElement):
+            self.presentation.remove_element_from_view (self, child)
+        Entity._remove_child (self, child)
+
+    def show_prepare (self):
+        """Prepare showing this entity to the user.
+
+        This function must create all required attributes, but must not actually present
+        anything to the user.
+        """
+        self.presentation.add_view (self)
+
     def show (self):
         """Show entity to user."""
-        self.presentation.add_view (self)
+        self.presentation.show_view (self)
 
     def hide (self):
         """Hide entity from user."""
@@ -273,6 +287,18 @@ class View (Entity):
                 return parent (self)
         return "View"
 
+
+class ViewElement (Entity):
+    """View element base class."""
+
+    def __init__ (self):
+        Entity.__init__ (self)
+        self.presentation = highgtk.present.current.get()
+
+    def show (self):
+        """Show entity to user."""
+        self.presentation.add_element_to_view (self.parent, self)
+        self.presentation.show_element (self)
 
 def get_root (entity):
     """Return the root for the given entity."""

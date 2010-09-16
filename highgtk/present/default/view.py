@@ -8,15 +8,21 @@ def add (view):
         title = view.get_title()
         view.present_window.set_title (title)
         view.present_window.connect ("delete_event", delete_event, view)
-        view.present_window.show_all()
+
+def show (view):
+    if getattr (view, "present_shown", None) is not None:
+        view.present_window.present()
     else:
-        window.present()
+        view.present_window.show_all()
+        view.present_shown = True
 
 def remove (view):
     window = getattr (view, "present_window", None)
     if window is not None:
         window.hide()
         del view.present_window
+        if getattr (view, "present_shown", None) is not None:
+            del view.present_shown
 
 def delete_event (widget, event, view):
     close_request = getattr (view, "close_request", None)
