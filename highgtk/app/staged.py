@@ -8,10 +8,14 @@ before the primary stage becomes accessable.
 
 """
 
+import logging
+
 import glib
 import gtk
 
 import highgtk.entity
+
+log = logging.getLogger ("highgtk.app")
 
 class Stage (highgtk.entity.Entity):
     """A stage within a stages application."""
@@ -22,10 +26,12 @@ class Stage (highgtk.entity.Entity):
         self.name = name
 
     def _run (self):
+        log.info ("running application stage: %s" % self.name)
         self.application.add (self)
         self.run()
 
     def _stop (self):
+        log.info ("stopping application stage: %s" % self.name)
         self.stop()
         self.application.remove (self, keep_children = True)
 
@@ -97,4 +103,5 @@ class Application (highgtk.entity.Application):
     def run (self):
         """Run main loop and start first stage (blocks until application is qutting)."""
         glib.idle_add (self._start)
+        log.info ("entering main loop")
         highgtk.entity.Application.run (self)

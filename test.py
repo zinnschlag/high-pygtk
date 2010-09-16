@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import logging
+
 import highgtk.app.staged
 import highgtk.element.text
 import highgtk.entity
@@ -40,6 +42,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.view.add (self.textview)
 
 if __name__=="__main__":
+    logging.basicConfig (level=logging.INFO)
     app = highgtk.app.staged.Application ("Test")
     app.stages.append (TestStage (app))
     app.run()
