@@ -1,0 +1,43 @@
+"""Table element.
+
+Attention: Do not confuse this with the gtk table widget!
+"""
+
+import gtk
+
+import highgtk.entity
+import highgtk.present.current
+
+class BaseDocumentElement (highgtk.entity.Entity):
+    """Base class for table document elements."""
+
+    def __init__ (self, columns):
+        """columns: list of (type, title) pairs. If title is None, the column is hidden.
+        """
+
+        highgtk.entity.Entity.__init__ (self)
+        self.columns = columns
+        types = []
+        for c, t in columns:
+            types.append (c)
+        self.data = gtk.TreeStore (*types)
+
+class OrderedDocumentElement (BaseDocumentElement):
+    pass
+
+class UnorderedDocumentElement (BaseDocumentElement):
+    pass
+
+class ViewElement (highgtk.entity.ViewElement):
+    """View of a table element."""
+
+    def __init__ (self, document):
+        highgtk.entity.Entity.__init__ (self)
+        self.document = document
+        self.presentation = highgtk.present.current.get()
+
+    def show_prepare (self):
+        self.presentation.add_element_table (self)
+
+    def hide (self):
+        self.presentation.remove_element_table (self)

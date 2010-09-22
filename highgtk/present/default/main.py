@@ -48,17 +48,25 @@ class Presentation:
         """Remove presentation from view."""
         highgtk.present.default.view.remove (view)
 
-    def add_element_text (self, view_element):
-        """Add presentation for text element to view_element."""
-        highgtk.present.default.element.add_text (view_element)
-
     def show_element (self, view_element):
         """Present element to user."""
         view_element.present_widget.show()
 
+    def add_element_text (self, view_element):
+        """Add presentation for text element to view_element."""
+        highgtk.present.default.element.add_text (view_element)
+
     def remove_element_text (self, view_element):
         """Remove presentation from view_element."""
         highgtk.present.default.element.remove_text (view_element)
+
+    def add_element_table (self, view_element):
+        """Add presentation for table element to view element."""
+        highgtk.present.default.element.add_table (view_element)
+
+    def remove_element_table (self, view_element):
+        """Remove presentation from view element."""
+        highgtk.present.default.element.remove_table (view_element)
 
     def add_element_to_view (self, view, view_element):
         """Add view element to view.
