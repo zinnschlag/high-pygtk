@@ -7,19 +7,20 @@ import gtk
 
 import highgtk.entity
 import highgtk.present.current
+import highgtk.cell
 
 class BaseDocumentElement (highgtk.entity.Entity):
     """Base class for table document elements."""
 
     def __init__ (self, columns):
-        """columns: list of (type, title) pairs. If title is None, the column is hidden.
+        """columns: list of data entries. If label is None, the column is hidden.
         """
 
         highgtk.entity.Entity.__init__ (self)
         self.columns = columns
         types = []
-        for c, t in columns:
-            types.append (c)
+        for c in columns:
+            types.append (highgtk.cell.get_type (c))
         self.data = gtk.TreeStore (*types)
 
 class OrderedDocumentElement (BaseDocumentElement):

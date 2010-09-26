@@ -45,7 +45,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.view.add (self.textview)
         self.view2 = highgtk.entity.View()
         self.document2.add (self.view2)
-        columns = [ (str, "test1") ]
+        columns = ( highgtk.data.Text ("id1", "text1"), )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
         self.tabledocument.data.append (None, ('some text',) )
         self.document2.add (self.tabledocument)

@@ -17,8 +17,8 @@ def add_table (element):
         element.present_widget = gtk.TreeView (element.document.data)
         element.present_columns = []
         for c in element.document.columns:
-            if c[1] is not None:
-                column = gtk.TreeViewColumn (c[1])
+            if c.label is not None:
+                column = gtk.TreeViewColumn (c.label)
                 element.present_widget.append_column (column)
                 element.present_columns.append (column)
 
