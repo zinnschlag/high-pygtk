@@ -196,7 +196,7 @@ class DocumentGroup (Entity):
 
     def _remove_child (self, child):
         Entity._remove_child (self, child)
-        if not [d for x in self.children if isinstance (x, Document)]:
+        if not [x for x in self.children if isinstance (x, Document)]:
             if self.parent is not None:
                 done = getattr (self.parent, "done", None)
                 if done is not None:
@@ -215,7 +215,7 @@ class Document (Entity):
     def close_child_request (self, child):
         """User requested to close a child of this document."""
         child.remove()
-        if not [d for x in self.children if isinstance (x, View)]:
+        if not [x for x in self.children if isinstance (x, View)]:
             self.remove()
 
     def get_title (self, child = None):
