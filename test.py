@@ -47,6 +47,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.document2.add (self.view2)
         columns = ( highgtk.data.Text ("id1", "text1"), )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
+        self.tabledocument.reorder = 0
         self.tabledocument.data.append (None, ('some text',) )
         self.tabledocument.data.append (None, ('more text',) )
         self.tabledocument.data.append (None, ('and then some more',) )

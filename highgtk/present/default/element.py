@@ -28,6 +28,9 @@ def add_table (element):
                 column.pack_start (renderer, True)
                 column.set_attributes (renderer, text=index)
                 index = index + 1
+        reorder = getattr (element.document, "reorder", None)
+        if reorder is not None:
+            element.present_widget.set_reorderable (True)
 
 def remove_table (element):
     widget = getattr (element, "present_widget", None)

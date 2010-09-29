@@ -24,6 +24,13 @@ class BaseDocumentElement (highgtk.entity.Entity):
         self.data = gtk.TreeStore (*types)
 
 class OrderedDocumentElement (BaseDocumentElement):
+    """Table with ordered rows.
+
+    Optional attributes:
+    - reorder: if present (value not None), the table rows can be reordered via drag & drop
+    (note: for forward compatibility purpose the attribute should be set to 0)
+
+    """
     pass
 
 class UnorderedDocumentElement (BaseDocumentElement):
