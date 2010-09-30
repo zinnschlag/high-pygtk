@@ -17,6 +17,7 @@ def add_table (element):
     widget = getattr (element, "present_widget", None)
     if widget is None:
         element.present_widget = gtk.ScrolledWindow()
+        element.present_widget.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         view = gtk.TreeView (element.document.data)
         view.set_rules_hint (True)
         element.present_widget.add_with_viewport (view)
