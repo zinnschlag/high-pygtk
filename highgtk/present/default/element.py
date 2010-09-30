@@ -22,6 +22,7 @@ def add_table (element):
         element.present_columns = []
         search = getattr (element, "search", None)
         index = 0
+        sort = isinstance (element.document, highgtk.element.table.UnorderedDocumentElement)
         for c in element.document.columns:
             if c.label is not None:
                 column = gtk.TreeViewColumn (c.label)
@@ -32,6 +33,8 @@ def add_table (element):
                 column.set_attributes (renderer, text=index)
                 if search is not None and search==c.id_:
                     view.set_search_column (index)
+                if sort:
+                    column.set_sort_column_id (index)
             index = index + 1
         reorder = getattr (element.document, "reorder", None)
         if reorder is not None:

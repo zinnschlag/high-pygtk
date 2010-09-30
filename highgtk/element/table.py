@@ -35,6 +35,9 @@ class OrderedDocumentElement (BaseDocumentElement):
     pass
 
 class UnorderedDocumentElement (BaseDocumentElement):
+    """Table with no inherent row order.
+
+    """
     pass
 
 class ViewElement (highgtk.entity.ViewElement):
