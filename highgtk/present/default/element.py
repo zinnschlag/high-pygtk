@@ -18,6 +18,7 @@ def add_table (element):
     if widget is None:
         element.present_widget = gtk.ScrolledWindow()
         view = gtk.TreeView (element.document.data)
+        view.set_rules_hint (True)
         element.present_widget.add_with_viewport (view)
         element.present_columns = []
         search = getattr (element, "search", None)
