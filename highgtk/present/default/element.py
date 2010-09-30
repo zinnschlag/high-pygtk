@@ -29,7 +29,7 @@ def add_table (element):
                 renderer = highgtk.cell.get_cell_renderer (c)
                 column.pack_start (renderer, True)
                 column.set_attributes (renderer, text=index)
-                index = index + 1
+            index = index + 1
         reorder = getattr (element.document, "reorder", None)
         if reorder is not None:
             view.set_reorderable (True)
