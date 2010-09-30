@@ -20,6 +20,7 @@ def add_table (element):
         view = gtk.TreeView (element.document.data)
         element.present_widget.add_with_viewport (view)
         element.present_columns = []
+        search = getattr (element, "search", None)
         index = 0
         for c in element.document.columns:
             if c.label is not None:
@@ -29,6 +30,8 @@ def add_table (element):
                 renderer = highgtk.cell.get_cell_renderer (c)
                 column.pack_start (renderer, True)
                 column.set_attributes (renderer, text=index)
+                if search is not None and search==c.id_:
+                    view.set_search_column (index)
             index = index + 1
         reorder = getattr (element.document, "reorder", None)
         if reorder is not None:

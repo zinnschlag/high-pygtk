@@ -14,6 +14,7 @@ class BaseDocumentElement (highgtk.entity.Entity):
 
     def __init__ (self, columns):
         """columns: list of data entries. If label is None, the column is hidden.
+
         """
 
         highgtk.entity.Entity.__init__ (self)
@@ -37,7 +38,11 @@ class UnorderedDocumentElement (BaseDocumentElement):
     pass
 
 class ViewElement (highgtk.entity.ViewElement):
-    """View of a table element."""
+    """View of a table element.
+
+    Optional attributes:
+    - search: if present (value not None), ID of the column used for searching
+    """
 
     def __init__ (self, document):
         highgtk.entity.Entity.__init__ (self)

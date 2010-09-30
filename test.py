@@ -53,6 +53,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.tabledocument.data.append (None, ('and then some more',) )
         self.document2.add (self.tabledocument)
         self.tableview = highgtk.element.table.ViewElement (self.tabledocument)
+        self.tableview.search = "id1"
         self.view2.add (self.tableview)
 
 if __name__=="__main__":
