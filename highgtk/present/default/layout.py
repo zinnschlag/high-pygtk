@@ -23,7 +23,7 @@ class PlainLayout:
         for e, c in self.data:
             inner = gtk.VBox()
             vbox.pack_start (inner, expand=False, fill=False, padding=8)
-            if e.label!="":
+            if e.label!="" and not isinstance (e, highgtk.data.Boolean):
                 label = gtk.Label (e.label)
                 label.set_alignment (0, 0.5)
                 inner.pack_start (label, expand=False, fill=False)
@@ -36,6 +36,12 @@ class PlainLayout:
             elif isinstance (e, highgtk.data.HiddenText):
                 entry = gtk.Entry()
                 entry.set_visibility (False)
+                if e.hint!="":
+                    entry.set_tooltip (e.hint)
+                inner.pack_start (entry, expand=False, fill=False)
+                self.widgets[e.id_] = entry
+            elif isinstance (e, highgtk.data.Boolean):
+                entry = gtk.CheckButton (e.label)
                 if e.hint!="":
                     entry.set_tooltip (e.hint)
                 inner.pack_start (entry, expand=False, fill=False)
@@ -54,6 +60,8 @@ class PlainLayout:
                 result[e.id_] = self.widgets[e.id_].get_text()
             elif isinstance (e, highgtk.data.HiddenText):
                 result[e.id_] = self.widgets[e.id_].get_text()
+            if isinstance (e, highgtk.data.Boolean):
+                result[e.id_] = self.widgets[e.id_].get_active()
         return result
 
     def get_error (self):

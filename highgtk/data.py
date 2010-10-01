@@ -17,3 +17,12 @@ class HiddenText:
         self.label = label
         self.default_value = default_value
         self.hint = hint
+
+class Boolean:
+    """Boolean value (True or False)."""
+
+    def __init__ (self, id_, label, default_value = False, hint = ""):
+        self.id_ = id_
+        self.label = label
+        self.default_value = default_value
+        self.hint = hint
