@@ -32,7 +32,12 @@ def add_table (element):
                 element.present_columns.append (column)
                 renderer = highgtk.cell.get_cell_renderer (c)
                 column.pack_start (renderer, True)
-                column.set_attributes (renderer, text=index)
+                if isinstance (renderer, gtk.CellRendererText):
+                    column.set_attributes (renderer, text=index)
+                elif isinstance (renderer, gtk.CellRendererToggle):
+                    column.set_attributes (renderer, active=index)
+                else:
+                    raise Exception ("Unsupported cell renderer")
                 if search is not None and search==c.id_:
                     view.set_search_column (index)
                 if sort:

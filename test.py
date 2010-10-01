@@ -46,12 +46,12 @@ class TestStage (highgtk.app.staged.Stage):
         self.view.add (self.textview)
         self.view2 = highgtk.entity.View()
         self.document2.add (self.view2)
-        columns = ( highgtk.data.Text ("id1", "text1"), )
+        columns = ( highgtk.data.Text ("id1", "text1"), highgtk.data.Boolean ("id2", "Option") )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
         self.tabledocument.reorder = 0
-        self.tabledocument.data.append (None, ('some text',) )
-        self.tabledocument.data.append (None, ('more text',) )
-        self.tabledocument.data.append (None, ('and then some more',) )
+        self.tabledocument.data.append (None, ('some text', True ) )
+        self.tabledocument.data.append (None, ('more text', False ) )
+        self.tabledocument.data.append (None, ('and then some more', True ) )
         self.document2.add (self.tabledocument)
         self.tableview = highgtk.element.table.ViewElement (self.tabledocument)
         self.tableview.search = "id1"
