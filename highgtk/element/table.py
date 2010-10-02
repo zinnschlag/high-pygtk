@@ -15,6 +15,9 @@ class BaseDocumentElement (highgtk.entity.Entity):
     def __init__ (self, columns):
         """columns: list of data entries. If label is None, the column is hidden.
 
+        If the id of the column starts with a '+', it is expanded, if the presentation does
+        support expanding.
+
         """
 
         highgtk.entity.Entity.__init__ (self)

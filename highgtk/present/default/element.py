@@ -31,6 +31,8 @@ def add_table (element):
                 view.append_column (column)
                 element.present_columns.append (column)
                 renderer = highgtk.cell.get_cell_renderer (c)
+                if c.id_[0]=='+':
+                    column.set_expand (True)
                 column.pack_start (renderer, True)
                 if isinstance (renderer, gtk.CellRendererText):
                     column.set_attributes (renderer, text=index)
