@@ -196,7 +196,7 @@ class DocumentGroup (Entity):
 
     def _remove_child (self, child):
         Entity._remove_child (self, child)
-        if not [x for x in self.children if isinstance (x, Document)]:
+        if self.primary and not [x for x in self.children if isinstance (x, Document)]:
             if self.parent is not None:
                 done = getattr (self.parent, "done", None)
                 if done is not None:
