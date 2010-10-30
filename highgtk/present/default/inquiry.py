@@ -41,7 +41,7 @@ def cancel (inquiry):
     if method_name is not None:
         method = getattr (inquiry.parent, method_name)
         method (inquiry)
-    inquiry.parent.remove (inquiry)
+    inquiry.remove (inquiry)
 
 def okay (inquiry):
     method_name = getattr (inquiry, "ok_method", "inquiry_okay")
@@ -52,7 +52,7 @@ def okay (inquiry):
     else:
         method = getattr (inquiry.parent, method_name)
         method (inquiry, inquiry.present_layout.get_data())
-        inquiry.parent.remove (inquiry)
+        inquiry.remove (inquiry)
 
 def response (widget, response_id, inquiry):
     if response_id==gtk.RESPONSE_OK:
