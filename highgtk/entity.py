@@ -1,8 +1,12 @@
 """This module provides the entity tree."""
 
+import logging
+
 import gtk
 
 import highgtk.present.current
+
+log = logging.getLogger ("highgtk.entity")
 
 class Entity:
     """This is the entity base class."""
@@ -22,6 +26,7 @@ class Entity:
 
     def add (self, entity):
         """Make entity a child of self."""
+        log.debug ("adding entity %s to %s" % (entity.__class__.__name__, self.__class__.__name__))
         if entity.parent is not None:
             entity.remove (keep_children=True)
         entity.parent = self
@@ -31,6 +36,7 @@ class Entity:
 
     def remove (self, remove_parent = True, keep_children = False):
         """Remove self from the entity graph."""
+        log.debug ("removing entity %s from parent" % self.__class__.__name__)
         self._hide()
         if not keep_children:
             for c in self.children:
