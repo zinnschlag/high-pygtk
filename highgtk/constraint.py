@@ -42,13 +42,42 @@ class Min (Constraint):
         entry: ID of data entry to be bound by constraint
 
         """
-        if isinstance (entry, highgtk.data.Text):
+        if isinstance (entry, highgtk.data.Text) or isinstance (entry, highgtk.data.HiddenText):
             if len (result[entry.id_])<self.limit:
                 if self.message is None:
                     return "%s must be at least %s characters long" % (entry.label, self.limit)
                 else:
                     return self.message
         return None
+
+
+class Max (Constraint):
+    """Maximum constraint.
+
+    Text: length of string
+
+    """
+
+    def __init__ (self, limit, message = None):
+        self.limit = limit
+        self.message = message
+
+    def get_error (self, data, result, entry):
+        """Return error string or None.
+
+        data: list of entry/constraints-list pairs
+        result: dictionary of result values indexed by ID.
+        entry: ID of data entry to be bound by constraint
+
+        """
+        if isinstance (entry, highgtk.data.Text) or isinstance (entry, highgtk.data.HiddenText):
+            if len (result[entry.id_])>self.limit:
+                if self.message is None:
+                    return "%s must be no longer than %s characters" % (entry.label, self.limit)
+                else:
+                    return self.message
+        return None
+
 
 class Equal (Constraint):
     """Equal constraint: This data entry must have the same value as another data entry."""
