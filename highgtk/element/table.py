@@ -32,16 +32,6 @@ class BaseDocumentElement (highgtk.entity.Entity):
             types.append (highgtk.cell.get_type (c))
         self.data = gtk.ListStore (*types)
 
-
-class OrderedDocumentElement (BaseDocumentElement):
-    """Table with ordered rows.
-
-    Optional attributes:
-    - reorder: if present (value not None), the table rows can be reordered via drag & drop
-    (note: for forward compatibility purpose the attribute should be set to 0)
-
-    """
-
     def update (self, content):
         """Update table content. If the table contains a column with the ID "ID" or "+ID",
         the table is updated, which will keep the selection status unmodified.
@@ -91,6 +81,17 @@ class OrderedDocumentElement (BaseDocumentElement):
         self.data.clear()
         for r in content:
             self.data.append (r)
+
+
+class OrderedDocumentElement (BaseDocumentElement):
+    """Table with ordered rows.
+
+    Optional attributes:
+    - reorder: if present (value not None), the table rows can be reordered via drag & drop
+    (note: for forward compatibility purpose the attribute should be set to 0)
+
+    """
+
 
 class UnorderedDocumentElement (BaseDocumentElement):
     """Table with no inherent row order.
