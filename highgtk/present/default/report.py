@@ -4,7 +4,7 @@ import gtk
 def add (report):
     window = getattr (report, "present_window", None)
     if window is None:
-        parent = getattr (report.parent, "present_report")
+        parent = getattr (report.parent, "present_report", None)
         if parent:
             prefix = ""
             if report.type=="warning":
