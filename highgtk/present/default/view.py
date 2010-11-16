@@ -8,6 +8,8 @@ def add (view):
         title = view.get_title()
         view.present_window.set_title (title)
         view.present_window.connect ("delete_event", delete_event, view)
+        view.present_layout = gtk.VBox()
+        view.present_window.add (view.present_layout)
 
 def show (view):
     if getattr (view, "present_shown", None) is not None:
@@ -21,6 +23,7 @@ def remove (view):
     if window is not None:
         window.hide()
         del view.present_window
+        del view.present_layout
         if getattr (view, "present_shown", None) is not None:
             del view.present_shown
 

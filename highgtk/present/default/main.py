@@ -77,7 +77,7 @@ class Presentation:
         child = view_element.present_widget
         children = view.present_window.get_children()
         if not children or children[0]!=child:
-            view.present_window.add (child)
+            view.present_layout.pack_start (child)
 
     def remove_element_from_view (self, view, view_element):
         """Remove view element from view.
@@ -88,4 +88,4 @@ class Presentation:
         child = view_element.present_widget
         children = view.present_window.get_children()
         if child in children:
-            view.present_window.remove (child)
+            view.present_layout.remove (child)
