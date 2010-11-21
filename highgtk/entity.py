@@ -240,6 +240,8 @@ class Document (Entity):
 class View (Entity):
     """View: Entity that allows the user to view and interact with a document.
 
+    Note: Views do support control managers (see highgtk.control).
+
     """
 
     def __init__ (self):

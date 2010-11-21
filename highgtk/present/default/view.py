@@ -1,6 +1,8 @@
 
 import gtk
 
+import highgtk.present.default.control
+
 def add (view):
     window = getattr (view, "present_window", None)
     if window is None:
@@ -10,6 +12,7 @@ def add (view):
         view.present_window.connect ("delete_event", delete_event, view)
         view.present_layout = gtk.VBox()
         view.present_window.add (view.present_layout)
+        highgtk.present.default.control.add_control (view)
 
 def show (view):
     if getattr (view, "present_shown", None) is not None:

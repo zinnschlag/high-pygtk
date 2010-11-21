@@ -8,6 +8,8 @@ import highgtk.element.table
 import highgtk.entity
 import highgtk.data
 import highgtk.constraint
+import highgtk.control.manager
+import highgtk.control.front
 
 class TestStage (highgtk.app.staged.Stage):
 
@@ -45,6 +47,14 @@ class TestStage (highgtk.app.staged.Stage):
         self.textview = highgtk.element.text.ViewElement (self.textdocument)
         self.view.add (self.textview)
         self.view2 = highgtk.entity.View()
+        self.view2.control = highgtk.control.manager.Root (self.view2)
+        self.view2.control.create_group ("test", highgtk.control.front.Custom ("Test"))
+        self.view2.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"), None,
+            parent="test")
+        self.view2.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
+            parent="test")
+        self.view2.control.create_interaction ("test4", highgtk.control.front.Custom ("Test4"), None,
+            parent="test3")
         self.document2.add (self.view2)
         columns = ( highgtk.data.Text ("+ID", "text1"), highgtk.data.Boolean ("id2", "Option") )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
@@ -58,6 +68,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.document2.add (self.tabledocument)
         self.tableview = highgtk.element.table.ViewElement (self.tabledocument)
         self.tableview.search = "+ID"
+
         self.view2.add (self.tableview)
 
 if __name__=="__main__":
