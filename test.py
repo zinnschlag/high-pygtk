@@ -10,11 +10,10 @@ import highgtk.data
 import highgtk.constraint
 import highgtk.control.manager
 import highgtk.control.front
+import highgtk.control.back
 
-class TestBack:
-
-    def execute (self):
-        print "execute"
+def test_execute():
+    print "execute"
 
 class TestStage (highgtk.app.staged.Stage):
 
@@ -55,11 +54,11 @@ class TestStage (highgtk.app.staged.Stage):
         self.view2.control = highgtk.control.manager.Root (self.view2)
         self.view2.control.create_group ("test", highgtk.control.front.Custom ("Test"))
         self.view2.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
-            TestBack(), parent="test")
+            highgtk.control.back.Function (test_execute), parent="test")
         self.view2.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
             parent="test")
         self.view2.control.create_interaction ("test4", highgtk.control.front.Custom ("Test4"),
-            TestBack(), parent="test3")
+            highgtk.control.back.Function (test_execute), parent="test3")
         self.document2.add (self.view2)
         columns = ( highgtk.data.Text ("+ID", "text1"), highgtk.data.Boolean ("id2", "Option") )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
