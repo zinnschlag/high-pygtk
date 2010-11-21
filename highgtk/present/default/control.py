@@ -1,5 +1,6 @@
 
 import logging
+import inspect
 
 import gtk
 
@@ -7,8 +8,11 @@ import highgtk.control
 
 log = logging.getLogger ("highgtk.present")
 
-def execute (widget, back):
-    back.execute()
+def execute (widget, back, entity):
+    if len (inspect.getargspec (back.execute)[0])==1:
+        back.execute()
+    else:
+        back.execute (entity)
 
 def _add_group (view, group, path, merge_id):
     for i in group.members:
@@ -27,7 +31,7 @@ def _add_group (view, group, path, merge_id):
                 False)
             back = getattr (i, "back", None)
             if back is not None:
-                action.connect ("activate", execute, back)
+                action.connect ("activate", execute, back, view)
             else:
                 log.error ("no back-end for action %s in %s" % (i.name, path))
 
