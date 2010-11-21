@@ -1,7 +1,14 @@
 
+import logging
+
 import gtk
 
 import highgtk.control
+
+log = logging.getLogger ("highgtk.present")
+
+def execute (widget, back):
+    back.execute()
 
 def _add_group (view, group, path, merge_id):
     for i in group.members:
@@ -18,6 +25,11 @@ def _add_group (view, group, path, merge_id):
         else:
             view.present_ui.add_ui (merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENUITEM,
                 False)
+            back = getattr (i, "back", None)
+            if back is not None:
+                action.connect ("activate", execute, back)
+            else:
+                log.error ("no back-end for action %s in %s" % (i.name, path))
 
 def add_control (view):
     manager = getattr (view, "control", None)
