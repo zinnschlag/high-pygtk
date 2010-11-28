@@ -19,6 +19,21 @@ class TestStage (highgtk.app.staged.Stage):
 
     def __init__ (self, app):
         highgtk.app.staged.Stage.__init__ (self, app, "Stage 1")
+        self.group = highgtk.entity.DocumentGroup (primary=True)
+
+    def _quit_ok (self, inquiry, results):
+        print results
+
+    def _quit_cancel (self, inquiry):
+        self.application.advance()
+
+    def run (self):
+        self.add (self.group)
+        self._setup_text()
+        self._setup_table()
+        self._setup_inquiry()
+
+    def _setup_inquiry (self):
         data = (
             ( highgtk.data.Text ("id1", "Some text"), [ highgtk.constraint.Min (3) ] ),
             ( highgtk.data.Text ("id2", "Some other text"), None ),
@@ -29,27 +44,21 @@ class TestStage (highgtk.app.staged.Stage):
         self.inquiry.title = "Some Input, please!"
         self.inquiry.ok_method = "_quit_ok"
         self.inquiry.cancel_method = "_quit_cancel"
-        self.group = highgtk.entity.DocumentGroup (primary=True)
-        self.document = highgtk.entity.Document()
-        self.document2 = highgtk.entity.Document()
-
-    def _quit_ok (self, inquiry, results):
-        print results
-
-    def _quit_cancel (self, inquiry):
-        self.application.advance()
-
-    def run (self):
         self.add (self.inquiry)
-        self.add (self.group)
+
+    def _setup_text (self):
+        self.document = highgtk.entity.Document()
         self.group.add (self.document)
-        self.group.add (self.document2)
         self.view = highgtk.entity.View()
         self.document.add (self.view)
         self.textdocument = highgtk.element.text.DocumentElement()
         self.document.add (self.textdocument)
         self.textview = highgtk.element.text.ViewElement (self.textdocument)
         self.view.add (self.textview)
+
+    def _setup_table (self):
+        self.document2 = highgtk.entity.Document()
+        self.group.add (self.document2)
         self.view2 = highgtk.entity.View()
         self.view2.control = highgtk.control.manager.Root (self.view2)
         self.view2.control.create_group ("test", highgtk.control.front.Custom ("Test"))
@@ -72,8 +81,8 @@ class TestStage (highgtk.app.staged.Stage):
         self.document2.add (self.tabledocument)
         self.tableview = highgtk.element.table.ViewElement (self.tabledocument)
         self.tableview.search = "+ID"
-
         self.view2.add (self.tableview)
+
 
 if __name__=="__main__":
     logging.basicConfig (level=logging.INFO)
