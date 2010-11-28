@@ -50,6 +50,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.document = highgtk.entity.Document()
         self.group.add (self.document)
         self.view = highgtk.entity.View()
+        self._setup_controls (self.view)
         self.document.add (self.view)
         self.textdocument = highgtk.element.text.DocumentElement()
         self.document.add (self.textdocument)
@@ -60,14 +61,7 @@ class TestStage (highgtk.app.staged.Stage):
         self.document2 = highgtk.entity.Document()
         self.group.add (self.document2)
         self.view2 = highgtk.entity.View()
-        self.view2.control = highgtk.control.manager.Root (self.view2)
-        self.view2.control.create_group ("test", highgtk.control.front.Custom ("Test"))
-        self.view2.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
-            highgtk.control.back.Function (test_execute), parent="test")
-        self.view2.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
-            parent="test")
-        self.view2.control.create_interaction ("test4", highgtk.control.front.Custom ("Test4"),
-            highgtk.control.back.Function (test_execute), parent="test3")
+        self._setup_controls (self.view2)
         self.document2.add (self.view2)
         columns = ( highgtk.data.Text ("+ID", "text1"), highgtk.data.Boolean ("id2", "Option") )
         self.tabledocument = highgtk.element.table.OrderedDocumentElement (columns)
@@ -83,6 +77,15 @@ class TestStage (highgtk.app.staged.Stage):
         self.tableview.search = "+ID"
         self.view2.add (self.tableview)
 
+    def _setup_controls (self, view):
+        view.control = highgtk.control.manager.Root (view)
+        view.control.create_group ("test", highgtk.control.front.Custom ("Test"))
+        view.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
+            highgtk.control.back.Function (test_execute), parent="test")
+        view.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
+            parent="test")
+        view.control.create_interaction ("test4", highgtk.control.front.Custom ("Test4"),
+            highgtk.control.back.Function (test_execute), parent="test3")
 
 if __name__=="__main__":
     logging.basicConfig (level=logging.INFO)
