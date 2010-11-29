@@ -89,3 +89,9 @@ class Presentation:
         children = view.present_window.get_children()
         if child in children:
             view.present_layout.remove (child)
+
+    def remove_control_interaction (self, interaction):
+        print "removal of interaction from linked view not supported"
+
+    def remove_control_group (self, group):
+        print "removal of group from linked view not supported"

@@ -86,6 +86,11 @@ class TestStage (highgtk.app.staged.Stage):
             parent="test")
         view.control.create_interaction ("test4", highgtk.control.front.Custom ("Test4"),
             highgtk.control.back.Function (test_execute), parent="test3")
+        view.control.create_interaction ("test5", highgtk.control.front.Custom ("Remove self"),
+            highgtk.control.back.Function (self._remove_test5), parent="test")
+
+    def _remove_test5 (self, view):
+        view.control.remove ("test5")
 
 if __name__=="__main__":
     logging.basicConfig (level=logging.INFO)

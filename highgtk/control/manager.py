@@ -47,16 +47,21 @@ class Group:
         self.semantics = semantics
         self.members = []
 
-    def _remove (self, name):
+    def _remove (self, name, entity):
         """Remove group or interaction from this group or a subgroup.
 
         Returns True if an instance has been found and removed, False otherwise."""
         for i in self.members:
             if i.name==name:
+                if hasattr (entity, "control") and entity.is_linked():
+                    if isinstance (i, Interaction):
+                        entity.presentation.remove_control_interaction (i)
+                    else:
+                        entity.presentation.remove_control_group (i)
                 self.members.remove (i)
                 return True
             elif isinstance (i, Group):
-                if i._remove (name):
+                if i._remove (name, entity):
                     return True
 
         return False
@@ -106,7 +111,7 @@ class ParentError (Exception):
 class NotFoundError (Exception):
 
     def __init__ (self, name):
-        self.name = anem
+        self.name = name
 
     def __str__ (self):
         return "Group or interaction %s not found" % self.name
@@ -170,7 +175,7 @@ class Root:
         If a group is removed, all sub-groups and interactions of this group are removed
         too."""
 
-        if not self.top._remove (name):
+        if not self.top._remove (name, self.entity):
             raise NotFoundError (name)
 
     def get (self, name):
