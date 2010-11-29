@@ -24,8 +24,7 @@ def _add_group (view, group, path, merge_id):
         if isinstance (i, highgtk.control.manager.Group):
             view.present_ui.add_ui (merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENU,
                 False)
-            path = path + "/" + i.name
-            _add_group (view, i, path, merge_id)
+            _add_group (view, i, path + "/" + i.name, merge_id)
         else:
             view.present_ui.add_ui (merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENUITEM,
                 False)
