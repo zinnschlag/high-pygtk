@@ -14,19 +14,22 @@ def execute (widget, back, entity):
     else:
         back.execute (entity)
 
-def _add_group (view, group, path, merge_id):
+def _add_group (view, group, path):
     for i in group.members:
         action = i.front.make_action (i.name)
+        i.present_action_group = gtk.ActionGroup (i.name)
+        view.present_ui.insert_action_group (i.present_action_group)
         if i.front.shortcut is None:
-            view.present_action_group.add_action (action)
+            i.present_action_group.add_action (action)
         else:
-            view.present_action_group.add_action_with_accel (action, i.front.shortcut)
+            i.present_action_group.add_action_with_accel (action, i.front.shortcut)
+        i.present_merge_id = view.present_ui.new_merge_id()
         if isinstance (i, highgtk.control.manager.Group):
-            view.present_ui.add_ui (merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENU,
+            view.present_ui.add_ui (i.present_merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENU,
                 False)
-            _add_group (view, i, path + "/" + i.name, merge_id)
+            _add_group (view, i, path + "/" + i.name)
         else:
-            view.present_ui.add_ui (merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENUITEM,
+            view.present_ui.add_ui (i.present_merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENUITEM,
                 False)
             back = getattr (i, "back", None)
             if back is not None:
@@ -44,4 +47,9 @@ def add_control (view):
         view.present_ui.add_ui (merge_id, '/', 'MenuBar', '', gtk.UI_MANAGER_MENUBAR, False)
         view.present_layout.pack_start (view.present_ui.get_widget ("/MenuBar"), False, False)
         main = manager.get ("main")
-        _add_group (view, main, '/MenuBar', merge_id)
+        _add_group (view, main, '/MenuBar')
+
+def remove_interaction (view, interaction):
+    view.present_ui.remove_ui (interaction.present_merge_id)
+    view.present_ui.remove_action_group (interaction.present_action_group)
+    del interaction.present_action_group

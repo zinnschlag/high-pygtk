@@ -90,8 +90,8 @@ class Presentation:
         if child in children:
             view.present_layout.remove (child)
 
-    def remove_control_interaction (self, interaction):
-        print "removal of interaction from linked view not supported"
+    def remove_control_interaction (self, view, interaction):
+        highgtk.present.default.control.remove_interaction (view, interaction)
 
-    def remove_control_group (self, group):
+    def remove_control_group (self, view, group):
         print "removal of group from linked view not supported"

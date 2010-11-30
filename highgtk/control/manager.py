@@ -55,9 +55,9 @@ class Group:
             if i.name==name:
                 if hasattr (entity, "control") and entity.is_linked():
                     if isinstance (i, Interaction):
-                        entity.presentation.remove_control_interaction (i)
+                        entity.presentation.remove_control_interaction (entity, i)
                     else:
-                        entity.presentation.remove_control_group (i)
+                        entity.presentation.remove_control_group (entity, i)
                 self.members.remove (i)
                 return True
             elif isinstance (i, Group):
