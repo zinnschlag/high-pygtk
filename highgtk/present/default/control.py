@@ -44,10 +44,10 @@ def add_control (view):
         view.present_action_group = gtk.ActionGroup ("main")
         view.present_ui.insert_action_group (view.present_action_group)
         merge_id = view.present_ui.new_merge_id()
-        view.present_ui.add_ui (merge_id, '/', 'MenuBar', '', gtk.UI_MANAGER_MENUBAR, False)
-        view.present_layout.pack_start (view.present_ui.get_widget ("/MenuBar"), False, False)
-        main = manager.get ("main")
-        _add_group (view, main, '/MenuBar')
+        view.present_ui.add_ui (merge_id, '/', 'main', '', gtk.UI_MANAGER_MENUBAR, False)
+        view.present_layout.pack_start (view.present_ui.get_widget ("/main"), False, False)
+        main = manager.get ("main")[0]
+        _add_group (view, main, '/main')
 
 def remove_interaction (view, interaction):
     view.present_ui.remove_ui (interaction.present_merge_id)

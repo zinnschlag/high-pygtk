@@ -70,13 +70,14 @@ class Group:
 
         for i in self.members:
             if i.name==name:
-                return i
+                return (i, [self.name])
             elif isinstance (i, Group):
-                sub = i._search (name)
+                sub, path = i._search (name)
                 if sub is not None:
-                    return sub
+                    path.insert (0, self.name)
+                    return (sub, path)
 
-        return None
+        return (None, None)
 
     def _is_yours (self, group):
 
@@ -127,8 +128,8 @@ class Root:
 
     def __init__ (self, entity):
         self.top = Group ("")
-        self.create_group ("main", None, parent=self.top)
         self.entity = entity
+        self.create_group ("main", None, parent=self.top)
         self.presentation = highgtk.present.current.get()
 
     def create_group (self, name, front, semantics = None, parent = None):
@@ -149,7 +150,7 @@ class Root:
         elif not semantics and parent:
             self._add_to_parent (parent, Group (name, front))
         elif not semantics and not parent:
-            self._add_to_parent (self.get ("main"), Group (name, front))
+            self._add_to_parent ("main", Group (name, front))
         else:
             raise CreationError (name)
 
@@ -179,14 +180,20 @@ class Root:
             raise NotFoundError (name)
 
     def get (self, name):
-        """Return an interaction or group with the given name."""
+        """Return an interaction or group with the given name.
 
-        instance = self._search (name)
+        Returns a pair:
+        - the interaction or group
+        - a list containing the ancestor groups of the interaction or group
+        (starting with the root-most group)
+        """
+
+        instance, path = self._search (name)
 
         if not instance:
             raise NotFoundError (name)
 
-        return instance
+        return (instance, path)
 
     def _search (self, name):
 
@@ -194,8 +201,15 @@ class Root:
 
     def _add_to_parent (self, parent, instance):
         if isinstance (parent, Group):
+            path = None
             if not self.top._is_yours (parent):
                 raise NotFoundError (parent.name)
         else:
-            parent = self.get (parent)
+            parent, path = self.get (parent)
         parent.members.append (instance)
+        if hasattr (self.entity, "control") and self.entity.is_linked():
+            path = self.get (parent.name)[1]
+            if isinstance (instance, Interaction):
+                self.entity.presentation.add_control_interaction (self.entity, path, instance)
+            else:
+                self.entity.presentation.add_control_group (self.entity, path, instance)
