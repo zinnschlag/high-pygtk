@@ -91,7 +91,7 @@ class TestStage (highgtk.app.staged.Stage):
     def _add_test5 (self, view):
         if not self.test5:
             view.control.create_interaction ("test5", highgtk.control.front.Custom ("Remove self"),
-                highgtk.control.back.Function (self._remove_test5), parent="test")
+                highgtk.control.back.Function (self._remove_test5), parent="test3")
             self.test5 = True
 
     def _remove_test5 (self, view):

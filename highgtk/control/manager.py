@@ -70,7 +70,7 @@ class Group:
 
         for i in self.members:
             if i.name==name:
-                return (i, [self.name])
+                return (i, [self.name, i.name])
             elif isinstance (i, Group):
                 sub, path = i._search (name)
                 if sub is not None:
