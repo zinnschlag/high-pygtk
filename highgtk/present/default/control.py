@@ -14,15 +14,19 @@ def execute (widget, back, entity):
     else:
         back.execute (entity)
 
+def _add_action (view, instance):
+    action = instance.front.make_action (instance.name)
+    instance.present_action_group = gtk.ActionGroup (instance.name)
+    view.present_ui.insert_action_group (instance.present_action_group)
+    if instance.front.shortcut is None:
+        instance.present_action_group.add_action (action)
+    else:
+        instance.present_action_group.add_action_with_accel (action, instance.front.shortcut)
+    return action
+
 def _add_group (view, group, path):
     for i in group.members:
-        action = i.front.make_action (i.name)
-        i.present_action_group = gtk.ActionGroup (i.name)
-        view.present_ui.insert_action_group (i.present_action_group)
-        if i.front.shortcut is None:
-            i.present_action_group.add_action (action)
-        else:
-            i.present_action_group.add_action_with_accel (action, i.front.shortcut)
+        action = _add_action (view, i)
         i.present_merge_id = view.present_ui.new_merge_id()
         if isinstance (i, highgtk.control.manager.Group):
             view.present_ui.add_ui (i.present_merge_id, path, i.name, i.name, gtk.UI_MANAGER_MENU,
@@ -53,3 +57,15 @@ def remove_interaction (view, interaction):
     view.present_ui.remove_ui (interaction.present_merge_id)
     view.present_ui.remove_action_group (interaction.present_action_group)
     del interaction.present_action_group
+
+def add_interaction (view, path, interaction):
+    action = _add_action (view, interaction)
+    interaction.present_merge_id = view.present_ui.new_merge_id()
+    path = '/' + '/'.join ([e for e in path[1:]])
+    view.present_ui.add_ui (interaction.present_merge_id, path, interaction.name,
+        interaction.name, gtk.UI_MANAGER_MENUITEM, False)
+    back = getattr (interaction, "back", None)
+    if back is not None:
+        action.connect ("activate", execute, back, view)
+    else:
+        log.error ("no back-end for action %s in %s" % (interaction.name, path))

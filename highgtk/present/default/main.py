@@ -103,7 +103,7 @@ class Presentation:
     def add_control_interaction (self, view, path, interaction):
         "Adding an interaction to a linked view."
 
-        print "adding of interaction to linked view not supported"
+        highgtk.present.default.control.add_interaction (view, path, interaction)
 
     def add_control_group (self, view, path, group):
         "Adding a group to a linked view."
