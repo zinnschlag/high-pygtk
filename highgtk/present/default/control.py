@@ -69,3 +69,20 @@ def add_interaction (view, path, interaction):
         action.connect ("activate", execute, back, view)
     else:
         log.error ("no back-end for action %s in %s" % (interaction.name, path))
+
+def remove_group (view, group):
+    for i in group.members:
+        if isinstance (i, highgtk.control.manager.Interaction):
+            remove_interaction (view, i)
+        else:
+            remove_group (view, i)
+    view.present_ui.remove_ui (group.present_merge_id)
+    view.present_ui.remove_action_group (group.present_action_group)
+    del group.present_action_group
+
+def add_group (view, path, group):
+    action = _add_action (view, group)
+    group.present_merge_id = view.present_ui.new_merge_id()
+    path = '/' + '/'.join ([e for e in path[1:]])
+    view.present_ui.add_ui (group.present_merge_id, path, group.name,
+        group.name, gtk.UI_MANAGER_MENU, False)

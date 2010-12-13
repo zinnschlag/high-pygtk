@@ -98,7 +98,7 @@ class Presentation:
     def remove_control_group (self, view, group):
         """Remove a group from a linked view."""
 
-        print "removal of group from linked view not supported"
+        highgtk.present.default.control.remove_group (view, group)
 
     def add_control_interaction (self, view, path, interaction):
         "Adding an interaction to a linked view."
@@ -108,4 +108,4 @@ class Presentation:
     def add_control_group (self, view, path, group):
         "Adding a group to a linked view."
 
-        print "adding of group to linked view not supported"
+        highgtk.present.default.control.add_group (view, path, group)
