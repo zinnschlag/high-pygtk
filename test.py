@@ -21,6 +21,7 @@ class TestStage (highgtk.app.staged.Stage):
         highgtk.app.staged.Stage.__init__ (self, app, "Stage 1")
         self.group = highgtk.entity.DocumentGroup (primary=True)
         self.test5 = False
+        self.test6 = False
 
     def _quit_ok (self, inquiry, results):
         print results
@@ -87,6 +88,8 @@ class TestStage (highgtk.app.staged.Stage):
             parent="test")
         view.control.create_interaction ("test4", highgtk.control.front.Custom ("Add test5"),
             highgtk.control.back.Function (self._add_test5), parent="test3")
+        view.control.create_interaction ("test4b", highgtk.control.front.Custom ("Add test6"),
+            highgtk.control.back.Function (self._add_test6), parent="test3")
 
     def _add_test5 (self, view):
         if not self.test5:
@@ -98,6 +101,20 @@ class TestStage (highgtk.app.staged.Stage):
         if self.test5:
             view.control.remove ("test5")
             self.test5 = False
+
+    def _add_test6 (self, view):
+        if not self.test6:
+            view.control.create_group ("test6", highgtk.control.front.Custom ("Test 6"),
+                parent="test3")
+            view.control.create_interaction ("test6b",
+                highgtk.control.front.Custom ("Remove parent group"),
+                highgtk.control.back.Function (self._remove_test6), parent="test6")
+            self.test6 = True
+
+    def _remove_test6 (self, view):
+        if self.test6:
+            view.control.remove ("test6")
+            self.test6 = False
 
 if __name__=="__main__":
     logging.basicConfig (level=logging.INFO)
