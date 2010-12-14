@@ -1,4 +1,9 @@
-"""Default presentation."""
+"""Default presentation.
+
+Limitations:
+
+The position argument for controls (interactions and groups) is ignored when adding controls
+to an already linked view."""
 
 import gtk
 

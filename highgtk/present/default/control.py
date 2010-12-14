@@ -24,8 +24,18 @@ def _add_action (view, instance):
         instance.present_action_group.add_action_with_accel (action, instance.front.shortcut)
     return action
 
+def compare (x, y):
+    if x.position==y.position:
+        return 0
+    elif y.position is None:
+        return -1
+    elif x.position is None:
+        return 1
+    else:
+        return cmp (x.position, y.position)
+
 def _add_group (view, group, path):
-    for i in group.members:
+    for i in sorted (group.members, cmp=compare):
         action = _add_action (view, i)
         i.present_merge_id = view.present_ui.new_merge_id()
         if isinstance (i, highgtk.control.manager.Group):

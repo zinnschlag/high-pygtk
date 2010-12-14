@@ -82,10 +82,10 @@ class TestStage (highgtk.app.staged.Stage):
     def _setup_controls (self, view):
         view.control = highgtk.control.manager.Root (view)
         view.control.create_group ("test", highgtk.control.front.Custom ("Test"))
-        view.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
-            highgtk.control.back.Function (test_execute), parent="test")
         view.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
-            parent="test")
+            parent="test", position=10)
+        view.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
+            highgtk.control.back.Function (test_execute), parent="test", position=0)
         view.control.create_interaction ("test4", highgtk.control.front.Custom ("Add test5"),
             highgtk.control.back.Function (self._add_test5), parent="test3")
         view.control.create_interaction ("test4b", highgtk.control.front.Custom ("Add test6"),

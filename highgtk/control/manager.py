@@ -1,12 +1,15 @@
 """This module defines interactions and a tree-structure to manage them """
 
+import logging
+
 import highgtk.present.current
 
+log = logging.getLogger ("highgtk.control")
 
 class Interaction:
     """The interaction brings together the front-end and the back-end of a control."""
 
-    def __init__ (self, name, front, back):
+    def __init__ (self, name, front, back, position = None):
         """Newly created interactions are enabled by default.
 
         front: an instance of a class defined in control.front
@@ -17,6 +20,7 @@ class Interaction:
         self.name = name
         self.front = front
         self.back = back
+        self.position = position
         self.enabled = True
 
     def enable (self):
@@ -41,10 +45,11 @@ class Interaction:
 class Group:
     """A collection of interactions and sub-groups."""
 
-    def __init__ (self, name, front = None, semantics = None):
+    def __init__ (self, name, front = None, semantics = None, position = None):
         self.name = name
         self.front = front
         self.semantics = semantics
+        self.position = position
         self.members = []
 
     def _remove (self, name, entity):
@@ -132,7 +137,7 @@ class Root:
         self.create_group ("main", None, parent=self.top)
         self.presentation = highgtk.present.current.get()
 
-    def create_group (self, name, front, semantics = None, parent = None):
+    def create_group (self, name, front, semantics = None, parent = None, position = None):
         """Create a new group and return it.
 
         Name must be unique within the root.
@@ -142,31 +147,42 @@ class Root:
         pre-existing group is returned. In this case the name of the group is not
         guaranteed to match the name argument.
         If neither semantics nor parent are given, the parent group "main" is assumed.
+        If no position is given, the group is appended at the end. Else position must be
+        an integer (larger positions are inserted after smaller positions). When semantics
+        are given, position is ignored (and results in a warning, when not None).
 
         """
 
         if semantics and not parent:
+            if position is not None:
+                log.warning ("position for group %s ignored because of semantics" % name)
             pass #TODO
         elif not semantics and parent:
-            self._add_to_parent (parent, Group (name, front))
+            self._add_to_parent (parent, Group (name, front, position=position))
         elif not semantics and not parent:
-            self._add_to_parent ("main", Group (name, front))
+            self._add_to_parent ("main", Group (name, front, position=position))
         else:
             raise CreationError (name)
 
-    def create_interaction (self, name, front, back, semantics = None, parent = None):
+    def create_interaction (self, name, front, back, semantics = None, parent = None,
+        position = None):
         """Create an interaction and return it.
 
         Name of the interaction must be unique within the root.
         Must have either semantics or parent.
         Parent can either be a Group instance that belongs to this root or a name.
+        If no position is given, the interaction is appended at the end. Else position must be
+        an integer (larger positions are inserted after smaller positions). When semantics
+        are given, position is ignored (and results in a warning, when not None).
 
         """
 
         if semantics and not parent:
+            if position is not None:
+                log.warning ("position for interaction %s ignored because of semantics" % name)
             pass #TODO
         elif not semantics and parent:
-            self._add_to_parent (parent, Interaction (name, front, back))
+            self._add_to_parent (parent, Interaction (name, front, back, position=position))
         else:
             raise CreationError (name)
 
