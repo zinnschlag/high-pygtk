@@ -6,7 +6,11 @@ import inspect
 
 
 class Function:
-    "Call a functino."
+    """Call a function
+
+    The function may have other zero or one (entity) arguments.
+
+    """
 
     def __init__ (self, function):
         self.function = function

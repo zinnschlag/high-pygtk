@@ -13,13 +13,17 @@ class Interaction:
         """Newly created interactions are enabled by default.
 
         front: an instance of a class defined in control.front
-        back: any instance, that provides a invoke method
+        back: any instance, that provides an execute method, or a callable object with
+        either zero or one (entity) arguments
 
         """
 
         self.name = name
         self.front = front
-        self.back = back
+        if hasattr (back, "__call__"):
+            self.back = highgtk.control.back.Function (back)
+        else:
+            self.back = back
         self.position = position
         self.enabled = True
 

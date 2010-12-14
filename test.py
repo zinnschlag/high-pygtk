@@ -85,16 +85,16 @@ class TestStage (highgtk.app.staged.Stage):
         view.control.create_group ("test3", highgtk.control.front.Custom ("Test3"),
             parent="test", position=10)
         view.control.create_interaction ("test2", highgtk.control.front.Custom ("Test2"),
-            highgtk.control.back.Function (test_execute), parent="test", position=0)
+            test_execute, parent="test", position=0)
         view.control.create_interaction ("test4", highgtk.control.front.Custom ("Add test5"),
-            highgtk.control.back.Function (self._add_test5), parent="test3")
+            self._add_test5, parent="test3")
         view.control.create_interaction ("test4b", highgtk.control.front.Custom ("Add test6"),
-            highgtk.control.back.Function (self._add_test6), parent="test3")
+            self._add_test6, parent="test3")
 
     def _add_test5 (self, view):
         if not self.test5:
             view.control.create_interaction ("test5", highgtk.control.front.Custom ("Remove self"),
-                highgtk.control.back.Function (self._remove_test5), parent="test3")
+                self._remove_test5, parent="test3")
             self.test5 = True
 
     def _remove_test5 (self, view):
@@ -108,7 +108,7 @@ class TestStage (highgtk.app.staged.Stage):
                 parent="test3")
             view.control.create_interaction ("test6b",
                 highgtk.control.front.Custom ("Remove parent group"),
-                highgtk.control.back.Function (self._remove_test6), parent="test6")
+                self._remove_test6, parent="test6")
             self.test6 = True
 
     def _remove_test6 (self, view):
