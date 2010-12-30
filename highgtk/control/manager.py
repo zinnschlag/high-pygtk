@@ -49,10 +49,9 @@ class Interaction:
 class Group:
     """A collection of interactions and sub-groups."""
 
-    def __init__ (self, name, front = None, semantics = None, position = None):
+    def __init__ (self, name, front = None, position = None):
         self.name = name
         self.front = front
-        self.semantics = semantics
         self.position = position
         self.members = []
 
@@ -98,15 +97,6 @@ class Group:
         return False
 
 
-class CreationError (Exception):
-
-    def __init__ (self, name):
-        self.name = name
-
-    def __str__ (self):
-        return "Data insufficient to place %s into the control tree" % self.name
-
-
 class ParentError (Exception):
 
     def __init__ (self, name, parent_name):
@@ -141,54 +131,36 @@ class Root:
         self.create_group ("main", None, parent=self.top)
         self.presentation = highgtk.present.current.get()
 
-    def create_group (self, name, front, semantics = None, parent = None, position = None):
+    def create_group (self, name, front, parent = None, position = None):
         """Create a new group and return it.
 
         Name must be unique within the root.
-        Must have either semantics or parent or neither one, but not both.
         Parent can either be a Group instance that belongs to this root or a name.
-        If semantics is given and there is already a group with similar semantics, the
-        pre-existing group is returned. In this case the name of the group is not
-        guaranteed to match the name argument.
-        If neither semantics nor parent are given, the parent group "main" is assumed.
+        If no parent is given, the parent group "main" is assumed.
         If no position is given, the group is appended at the end. Else position must be
-        an integer (larger positions are inserted after smaller positions). When semantics
-        are given, position is ignored (and results in a warning, when not None).
+        an integer (larger positions are inserted after smaller positions)
 
         """
 
-        if semantics and not parent:
-            if position is not None:
-                log.warning ("position for group %s ignored because of semantics" % name)
-            pass #TODO
-        elif not semantics and parent:
-            self._add_to_parent (parent, Group (name, front, position=position))
-        elif not semantics and not parent:
-            self._add_to_parent ("main", Group (name, front, position=position))
-        else:
-            raise CreationError (name)
+        group = Group (name, front, position=position)
+        if not parent:
+            parent = "main"
+        self._add_to_parent (parent, group)
+        return group
 
-    def create_interaction (self, name, front, back, semantics = None, parent = None,
-        position = None):
+    def create_interaction (self, name, front, back, parent, position = None):
         """Create an interaction and return it.
 
         Name of the interaction must be unique within the root.
-        Must have either semantics or parent.
         Parent can either be a Group instance that belongs to this root or a name.
         If no position is given, the interaction is appended at the end. Else position must be
-        an integer (larger positions are inserted after smaller positions). When semantics
-        are given, position is ignored (and results in a warning, when not None).
+        an integer (larger positions are inserted after smaller positions).
 
         """
 
-        if semantics and not parent:
-            if position is not None:
-                log.warning ("position for interaction %s ignored because of semantics" % name)
-            pass #TODO
-        elif not semantics and parent:
-            self._add_to_parent (parent, Interaction (name, front, back, position=position))
-        else:
-            raise CreationError (name)
+        interaction = Interaction (name, front, back, position=position)
+        self._add_to_parent (parent, interaction)
+        return interaction
 
     def remove (self, name):
         """Remove an interaction or group with the given name.
