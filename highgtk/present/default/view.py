@@ -7,6 +7,7 @@ def add (view):
     window = getattr (view, "present_window", None)
     if window is None:
         view.present_window = gtk.Window()
+        view.present_window.set_default_size (600, 400)
         title = view.get_title()
         view.present_window.set_title (title)
         view.present_window.connect ("delete_event", delete_event, view)
