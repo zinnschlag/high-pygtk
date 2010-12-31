@@ -16,7 +16,8 @@ class Function:
         self.function = function
 
     def execute (self, entity):
-        if len (inspect.getargspec (self.function)[0])==0:
+        if (len (inspect.getargspec (self.function)[0])==0 or
+            inspect.getargspec (self.function)[0][0]=='self'):
             self.function()
         else:
             self.function (entity)
