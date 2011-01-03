@@ -24,8 +24,14 @@ class Entity:
                 return True
         return False
 
-    def add (self, entity):
-        """Make entity a child of self."""
+    def add (self, entity, force = False):
+        """Make entity a child of self.
+
+        force: Enforce re-linking of entity (otherwise if self is already the parent of
+        entity, the function call is a no-op).
+        """
+        if entity.parent is self and not force:
+            return
         log.debug ("adding entity %s to %s" % (entity.__class__.__name__, self.__class__.__name__))
         if entity.parent is not None:
             entity.remove (keep_children=True)
