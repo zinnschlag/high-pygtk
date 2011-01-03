@@ -315,3 +315,11 @@ def get_root (entity):
         entity = entity.parent
     assert isinstance (entity, Application)
     return entity
+
+def get_ancestor (entity, type_):
+    """Return the nearest ancestor of the given type or None if there is none."""
+    while entity.parent is not None:
+        if isinstance (entity.parent, type_):
+            return entity.parent
+        entity = entity.parent
+    return None
